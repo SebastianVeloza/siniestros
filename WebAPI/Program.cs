@@ -2,6 +2,7 @@ using Application.Services;
 using Application.Services.JWT;
 using Domain.Entities;
 using Domain.Entities.JWT;
+using Domain.Interfaces;
 using Domain.Interfaces.JWT;
 using Domain.Interfaces.Repositories;
 using Infrastructure;
@@ -136,9 +137,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<IciudadesRepository, ciudadesRepository>();
 builder.Services.AddScoped<IdepartamentosRepository, departamentosRepository>();
 builder.Services.AddScoped<Ihistorico_refresh_tokenRepository, historico_Refresh_TokenRepository>();
-builder.Services.AddScoped<ILogs_SiniestrosRepository, ILogs_SiniestrosRepository>();
+builder.Services.AddScoped<ILogs_SiniestrosRepository, Logs_SiniestrosRepository>();
 builder.Services.AddScoped<ISiniestrosRepository, siniestrosRepository>();
 builder.Services.AddScoped<Itipos_siniestroRepository, tipos_SiniestroRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 #endregion
 

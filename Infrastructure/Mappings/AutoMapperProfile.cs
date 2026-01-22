@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Application.DTO.Response;
+using AutoMapper;
+using Domain.Entities;
 
 namespace Infrastructure.Mappings
 {
@@ -6,7 +8,8 @@ namespace Infrastructure.Mappings
     {
         public AutoMapperProfile()
         {
-           
+
+            CreateMap<Siniestros, SiniestroResponse>();
 
         }
     }

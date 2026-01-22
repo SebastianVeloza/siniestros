@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -7,6 +8,15 @@ namespace Infrastructure.Repositories
     {
         public siniestrosRepository(Context context) : base(context)
         {
+        }
+
+        public IQueryable<Siniestros> Query()
+        {
+            return _context.Siniestros.AsNoTracking().AsQueryable();
+        }
+        public async Task<int> CountAsync(IQueryable<Siniestros> query)
+        {
+            return await query.AsNoTracking().CountAsync();
         }
     }
 }
