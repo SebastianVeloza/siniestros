@@ -105,11 +105,12 @@ builder.Services.AddAuthentication(options =>
 #endregion
 
 #region Conexion BD
-builder.Services.AddDbContextFactory<Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlOptions =>
-    {
-        sqlOptions.CommandTimeout(3000);
-    }));
+builder.Services.AddDbContext<Context>(options =>
+
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.CommandTimeout(3000)
+    ));
 #endregion
 
 #region MediatR
@@ -165,3 +166,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { } //Para la pruebas de integración
+

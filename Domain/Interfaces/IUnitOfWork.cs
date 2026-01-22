@@ -17,8 +17,7 @@ namespace Domain.Interfaces
         Task<long> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
-        Task<string> RollbackTransactionAsync();
-        IUnitOfWork CreateScoped();
+        Task RollbackTransactionAsync();
 
     }
 }

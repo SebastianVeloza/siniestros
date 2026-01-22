@@ -12,7 +12,6 @@ namespace Infrastructure
         private string error = "";
         private IDbContextTransaction _transaction;
         //no se ponen en el constructor
-        private readonly IDbContextFactory<Context> _contextFactory;
         private readonly Context _context;
 
         public IciudadesRepository ciudadesRepository { get; }
@@ -27,22 +26,18 @@ namespace Infrastructure
 
         public Ihistorico_refresh_tokenRepository historico_Refresh_TokenRepository { get; }
 
-        public UnitOfWork(IDbContextFactory<Context> contextFactory)
+        public UnitOfWork(Context context)
         {
-            _contextFactory = contextFactory;
-            _context = _contextFactory.CreateDbContext();
+            _context = context;
 
             ciudadesRepository = new ciudadesRepository(_context);
             departamentosRepository = new departamentosRepository(_context);
             this.historico_Refresh_TokenRepository = new historico_Refresh_TokenRepository(_context);
             Logs_SiniestrosRepository = new Logs_SiniestrosRepository(_context);
             siniestrosRepository = new siniestrosRepository(_context);
-            tipos_SiniestroRepository = new tipos_SiniestroRepository(_context);    
+            tipos_SiniestroRepository = new tipos_SiniestroRepository(_context);
         }
-        public IUnitOfWork CreateScoped()
-        {
-            return new UnitOfWork(_contextFactory);
-        }
+
         public async Task<long> SaveChangesAsync()
         {
             try
@@ -79,10 +74,9 @@ namespace Infrastructure
             await _transaction.CommitAsync();
         }
 
-        public async Task<string> RollbackTransactionAsync()
+        public async Task RollbackTransactionAsync()
         {
             await _transaction.RollbackAsync();
-            return error;
         }
     }
 }

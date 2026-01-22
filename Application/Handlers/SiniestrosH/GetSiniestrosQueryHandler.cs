@@ -25,10 +25,27 @@ namespace Application.Handlers.SiniestrosH
                     query = query.Where(x => x.departamentos_id == request.departamentos_id);
 
                 if (request.FechaInicio.HasValue)
-                    query = query.Where(x => x.fechahora >= request.FechaInicio);
+                {
+                    if (request.FechaInicio > request.FechaFin)
+                    {
+                        throw new Exception("|La fecha incial no puede ser mayor a la fecha final.");
+                    }
+                    if (!request.FechaFin.HasValue)
+                    {
+                        throw new Exception("|Debe llenar la fecha final tambien.");
+                    }
+                    query = query.Where(x => x.fechahora.Date >= request.FechaInicio.Value.Date);
+                }
 
                 if (request.FechaFin.HasValue)
-                    query = query.Where(x => x.fechahora <= request.FechaFin);
+                {
+                    if (!request.FechaInicio.HasValue)
+                    {
+                        throw new Exception("|Debe llenar la fecha de inicio tambien.");
+                    }
+                    var fechaFin = request.FechaFin.Value.Date.AddDays(1).AddTicks(-1);
+                    query = query.Where(x => x.fechahora <= fechaFin);
+                }
 
                 var total = await _unitOfWork.siniestrosRepository.CountAsync(query);
 
@@ -55,10 +72,14 @@ namespace Application.Handlers.SiniestrosH
                 return new PagedResult<SiniestroResponse>(
                     items, total, request.Page, request.PageSize);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                if (ex.Message.StartsWith("|") == false)
+                {
+                    throw;
+                }
+                throw new Exception(ex.Message);
 
-                throw;
             }
         }
     }

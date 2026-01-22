@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
+using System.Text.Json;
 
 namespace Application.Handlers.SiniestrosH
 {
@@ -33,14 +34,29 @@ namespace Application.Handlers.SiniestrosH
                 };
 
                  _unitOfWork.siniestrosRepository.Add(siniestro);
+
+                string jsonString = JsonSerializer.Serialize(siniestro);
+                var log = new Logs_Siniestros
+                {
+                    tabla = "Siniestros",
+                    envio = jsonString,
+                    accion = "Insertar",
+                    fechahora = DateTime.Now,
+                };
+                _unitOfWork.Logs_SiniestrosRepository.Add(log);
                 await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return siniestro.Siniestros_id;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                throw;
+                if (ex.Message.StartsWith("|") == false)
+                {
+                    throw;
+                }
+                throw new Exception(ex.Message);
+
             }
         }
     }

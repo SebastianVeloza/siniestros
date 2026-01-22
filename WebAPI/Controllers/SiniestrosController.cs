@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<int>> Create([FromBody] CreateSiniestrosCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(result);
+            return CreatedAtAction(nameof(Get), new { result }, null);
         }
 
         [HttpGet]
