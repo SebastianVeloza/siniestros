@@ -106,3 +106,10 @@ Durante el desarrollo se priorizó:
 - Se aplican principios **KISS** y **YAGNI**, evitando sobreingeniería.
 - Los catálogos (Departamento, Ciudad, Tipo de Siniestro) se modelan como
   tablas independientes para garantizar integridad referencial.
+
+## Documentación
+
+- [Carpeta BD](./BD)
+- [Carpeta DOCS](./DOCS)
+
+
