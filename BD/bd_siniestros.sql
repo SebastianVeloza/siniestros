@@ -1,6 +1,10 @@
-CREATE DATABASE siniestros_viales;
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'SiniestrosDB')
+BEGIN
+    CREATE DATABASE SiniestrosDB;
+END
+GO
 
-USE siniestros_viales;
+USE SiniestrosDB;
 --Tablas
 CREATE TABLE departamentos (
     departamentos_id INT IDENTITY(1,1) PRIMARY KEY,
@@ -70,65 +74,65 @@ INSERT INTO tipos_siniestro (nombre) VALUES
 ('Choque'),
 ('Atropello'),
 ('Volcamiento'),
-('Colisión múltiple'),
+('Colisiï¿½n mï¿½ltiple'),
 ('Otro');
 
 INSERT INTO departamentos (nombre) VALUES
 ('Amazonas'),
 ('Antioquia'),
 ('Arauca'),
-('Atlántico'),
-('Bolívar'),
-('Boyacá'),
+('Atlï¿½ntico'),
+('Bolï¿½var'),
+('Boyacï¿½'),
 ('Caldas'),
-('Caquetá'),
+('Caquetï¿½'),
 ('Casanare'),
 ('Cauca'),
 ('Cesar'),
-('Chocó'),
-('Córdoba'),
+('Chocï¿½'),
+('Cï¿½rdoba'),
 ('Cundinamarca'),
-('Guainía'),
+('Guainï¿½a'),
 ('Guaviare'),
 ('Huila'),
 ('La Guajira'),
 ('Magdalena'),
 ('Meta'),
-('Nariño'),
+('Nariï¿½o'),
 ('Norte de Santander'),
 ('Putumayo'),
-('Quindío'),
+('Quindï¿½o'),
 ('Risaralda'),
-('San Andrés y Providencia'),
+('San Andrï¿½s y Providencia'),
 ('Santander'),
 ('Sucre'),
 ('Tolima'),
 ('Valle del Cauca'),
-('Vaupés'),
+('Vaupï¿½s'),
 ('Vichada'),
-('Bogotá D.C.');
+('Bogotï¿½ D.C.');
 
 --Algunas ciudades
 -- Antioquia
 INSERT INTO ciudades (Nombre, departamentos_id)
 VALUES
-('Medellín', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Antioquia')),
+('Medellï¿½n', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Antioquia')),
 ('Envigado', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Antioquia')),
-('Itagüí', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Antioquia')),
+('Itagï¿½ï¿½', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Antioquia')),
 ('Bello', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Antioquia'));
 
 --Cundinamarca
 INSERT INTO ciudades (Nombre, departamentos_id)
 VALUES
 ('Soacha', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Cundinamarca')),
-('Chía', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Cundinamarca')),
-('Zipaquirá', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Cundinamarca')),
-('Facatativá', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Cundinamarca'));
+('Chï¿½a', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Cundinamarca')),
+('Zipaquirï¿½', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Cundinamarca')),
+('Facatativï¿½', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Cundinamarca'));
 
---Bogotá D.C.
+--Bogotï¿½ D.C.
 INSERT INTO ciudades (Nombre, departamentos_id)
 VALUES
-('Bogotá', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Bogotá D.C.'));
+('Bogotï¿½', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Bogotï¿½ D.C.'));
 
 --Valle del Cauca
 INSERT INTO ciudades (Nombre, departamentos_id)
@@ -137,11 +141,11 @@ VALUES
 ('Palmira', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Valle del Cauca')),
 ('Buenaventura', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Valle del Cauca'));
 
---Atlántico
+--Atlï¿½ntico
 INSERT INTO ciudades (Nombre, departamentos_id)
 VALUES
-('Barranquilla', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Atlántico')),
-('Soledad', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Atlántico'));
+('Barranquilla', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Atlï¿½ntico')),
+('Soledad', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Atlï¿½ntico'));
 
 --Santander
 INSERT INTO ciudades (Nombre, departamentos_id)
@@ -149,17 +153,17 @@ VALUES
 ('Bucaramanga', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Santander')),
 ('Floridablanca', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Santander'));
 
---Bolívar
+--Bolï¿½var
 INSERT INTO ciudades (Nombre, departamentos_id)
 VALUES
-('Cartagena', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Bolívar')),
-('Magangué', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Bolívar'));
+('Cartagena', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Bolï¿½var')),
+('Maganguï¿½', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Bolï¿½var'));
 
---Nariño
+--Nariï¿½o
 INSERT INTO ciudades (Nombre, departamentos_id)
 VALUES
-('Pasto', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Nariño')),
-('Ipiales', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Nariño'));
+('Pasto', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Nariï¿½o')),
+('Ipiales', (SELECT departamentos_id FROM departamentos WHERE Nombre = 'Nariï¿½o'));
 
 --prueba
 SELECT d.Nombre AS Departamento, c.Nombre AS Ciudad

@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(opcion =>
     {
         Version = "v1",
         Title = "Siniestros viales",
-        Description = "Facilitar la gestión y análisis de siniestros viales, ofreciendo una API flexible y escalable que pueda integrarse con sistemas de reporte, visualización o análisis estadístico.",
+        Description = "Facilitar la gestiï¿½n y anï¿½lisis de siniestros viales, ofreciendo una API flexible y escalable que pueda integrarse con sistemas de reporte, visualizaciï¿½n o anï¿½lisis estadï¿½stico.",
         Contact = new OpenApiContact
         {
             Name = "Sebastian Veloza",
@@ -73,6 +73,11 @@ builder.Services.AddDbContext<Context>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlOptions => sqlOptions.CommandTimeout(3000)
     ));
+
+//Docker
+Console.WriteLine(
+    builder.Configuration.GetConnectionString("DefaultConnection")
+);
 #endregion
 
 #region Repositorios y UOW
@@ -162,7 +167,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowSpecificOrigin");
 // Middleware de manejo de errores
 app.UseMiddleware<ErrorHandlingMiddleware>();
-// Usar el middleware JWT para la autenticación
+// Usar el middleware JWT para la autenticaciï¿½n
 app.UseMiddleware<JwtMiddleware>();
 
 app.UseAuthentication();
@@ -172,5 +177,5 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program { } //Para la pruebas de integración
+public partial class Program { } //Para la pruebas de integraciï¿½n
 

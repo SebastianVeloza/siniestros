@@ -1,21 +1,15 @@
-# Build stage
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copiar csproj y restaurar
-COPY *.sln .
-COPY src/Application/*.csproj src/Application/
-COPY src/Domain/*.csproj src/Domain/
-COPY src/Infrastructure/*.csproj src/Infrastructure/
-COPY src/WebAPI/*.csproj src/WebAPI/
-
-RUN dotnet restore
-
-# Copiar todo el código
+# Copiar TODO el repositorio
 COPY . .
 
-# Build
-RUN dotnet publish src/WebAPI/WebAPI.csproj \
+# Restaurar usando la solución
+RUN dotnet restore siniestros_viales.sln
+
+# Publicar WebAPI
+RUN dotnet publish WebAPI/WebAPI.csproj \
     -c Release \
     -o /app/publish \
     /p:UseAppHost=false
