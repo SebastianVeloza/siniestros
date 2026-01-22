@@ -43,7 +43,6 @@ builder.Services.AddSwaggerGen(opcion =>
 
 builder.Services.AddRouting(x => x.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 #endregion
 
 #region Cors
@@ -174,6 +173,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();
 

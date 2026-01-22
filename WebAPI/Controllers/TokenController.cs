@@ -25,12 +25,10 @@ namespace WebAPI.Controllers
 
 
         /// <summary>
-        /// Login para empleado.
+        /// Genera Token.
         /// </summary>
-        /// <param name="login"> Usuario para ingresar sesion.</param>
-        /// <param name="Password">Contraseña para ingresar sesion.</param>
         [HttpPost]
-        [Route("token")]
+        [Route("generar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> GetByLogin()
