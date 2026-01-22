@@ -40,6 +40,23 @@ CREATE TABLE Siniestros (
         FOREIGN KEY (tipos_siniestro_id) REFERENCES tipos_siniestro(tipos_siniestro_id)
 );
 
+CREATE TABLE historico_refresh_token (
+    historico_refresh_token_id INT IDENTITY(1,1) PRIMARY KEY,
+    token NVARCHAR(MAX) NOT NULL,
+	refresh_token NVARCHAR(500) NOT NULL,
+	fecha_creacion DATETIME NOT NULL,
+	fecha_expiracion DATETIME NOT NULL,
+	activo AS ( CASE WHEN fecha_expiracion< GETDATE() THEN CONVERT(BIT,(0)) ELSE CONVERT(BIT,(1)) END),
+);
+CREATE TABLE Logs_Siniestros (
+    Logs_Siniestros_id INT IDENTITY(1,1) PRIMARY KEY,
+    fechahora DATETIME2 NOT NULL,
+    accion NVARCHAR(20) NOT NULL,
+    envio NVARCHAR(MAX) NOT NULL,
+    tabla NVARCHAR(100) NOT NULL,
+    
+);
+
 --Indices
 CREATE INDEX IX_Siniestros_FechaHora
 ON Siniestros(FechaHora);

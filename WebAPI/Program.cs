@@ -1,13 +1,17 @@
 using Application.Services;
+using Domain.Entities;
 using Domain.Entities.JWT;
+using Domain.Interfaces.Repositories;
 using Infrastructure;
 using Infrastructure.Mappings;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -117,6 +121,12 @@ builder.Services.AddTransient(typeof(IAppLogger<>), typeof(WebAPI.Log4NetAppLogg
 #endregion
 
 #region Repositorios y UOW
+builder.Services.AddScoped<IciudadesRepository, ciudadesRepository>();
+builder.Services.AddScoped<IdepartamentosRepository, departamentosRepository>();
+builder.Services.AddScoped<Ihistorico_refresh_tokenRepository, historico_Refresh_TokenRepository>();
+builder.Services.AddScoped<ILogs_SiniestrosRepository, ILogs_SiniestrosRepository>();
+builder.Services.AddScoped<ISiniestrosRepository, siniestrosRepository>();
+builder.Services.AddScoped<Itipos_siniestroRepository, tipos_SiniestroRepository>();
 
 #endregion
 
@@ -131,6 +141,11 @@ if (app.Environment.IsDevelopment())
 
 // Configurar CORS
 app.UseCors("AllowSpecificOrigin");
+// Middleware de manejo de errores
+app.UseMiddleware<ErrorHandlingMiddleware>();
+// Usar el middleware JWT para la autenticación
+app.UseMiddleware<JwtMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllers();
