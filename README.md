@@ -85,7 +85,7 @@ git clone https://github.com/usuario/siniestros-api.git
 4. Configurar la cadena de conexión en `appsettings.json`
 5. Ejecutar el proyecto WebAPI
 6. Acceder a Swagger en:
-   http://localhost:{puerto}/swagger
+   http://localhost:5035/swagger
 
 ## Consideraciones finales
 
