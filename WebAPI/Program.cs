@@ -1,6 +1,8 @@
 using Application.Services;
+using Application.Services.JWT;
 using Domain.Entities;
 using Domain.Entities.JWT;
+using Domain.Interfaces.JWT;
 using Domain.Interfaces.Repositories;
 using Infrastructure;
 using Infrastructure.Mappings;
@@ -68,7 +70,8 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(AutoMapperProfil
 #endregion
 
 #region JWT
-
+builder.Services.AddScoped<AuthService>(); // Registrar AuthService
+builder.Services.AddScoped<RefreshTokenService>();
 var jwtSettings = new JwtSettings();
 builder.Configuration.Bind(nameof(JwtSettings), jwtSettings);
 builder.Services.AddSingleton(jwtSettings);
@@ -118,6 +121,15 @@ builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(Applicati
 builder.Services.AddTransient(typeof(IAppLogger<>), typeof(WebAPI.Log4NetAppLogger<>));
 
 
+#endregion
+#region HttpOnly Cookie
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Usar siempre HTTPS
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
 #endregion
 
 #region Repositorios y UOW
