@@ -1,0 +1,58 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: siniestros_sqlserver
+    environment:
+      SA_PASSWORD: "YourStrong@Password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - siniestros_net
+
+  sql-init:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: siniestros_sql_init
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./BD:/scripts
+    entrypoint: >
+      /bin/bash -c "
+      sleep 20 &&
+      /opt/mssql-tools/bin/sqlcmd
+      -S sqlserver
+      -U sa
+      -P YourStrong@Password123
+      -i /scripts/bd_siniestros.sql
+      "
+    networks:
+      - siniestros_net
+
+  api:
+    container_name: siniestros_api
+    build:
+      context: .
+      dockerfile: WebAPI/Dockerfile
+    depends_on:
+      - sqlserver
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: >
+        Server=sqlserver;
+        Database=SiniestrosDB;
+        User Id=sa;
+        Password=YourStrong@Password123;
+        TrustServerCertificate=True;
+    networks:
+      - siniestros_net
+
+volumes:
+  sql_data:
+
+networks:
+  siniestros_net:
