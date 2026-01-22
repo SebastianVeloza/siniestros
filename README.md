@@ -87,7 +87,7 @@ git clone https://github.com/usuario/siniestros-api.git
 6. Acceder a Swagger en:
    http://localhost:{puerto}/swagger
 
-## 🧠 Consideraciones finales
+## Consideraciones finales
 
 Durante el desarrollo se priorizó:
 
