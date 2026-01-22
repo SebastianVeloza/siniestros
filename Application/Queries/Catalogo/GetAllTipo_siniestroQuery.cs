@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Application.Queries.Catalogo
 {
-    public record GetAllTipo_siniestroQuery(int Page, int PageSize) : IRequest<PagedResult<tipos_siniestro>>;
+    public record GetAllTipo_siniestroQuery(string? nombre, int PageNumber = 1, int PageSize = 10) : IRequest<CountPage<tipos_siniestro>>;
 }

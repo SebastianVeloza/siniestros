@@ -31,6 +31,9 @@ namespace WebAPI.Controllers
             return CreatedAtAction(nameof(Get), new { result }, null);
         }
 
+        /// <summary>
+        /// Obtiene todos los SiniestroResponse con filtros.
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<SiniestroResponse>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

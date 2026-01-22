@@ -66,8 +66,40 @@ log4net.Config.XmlConfigurator.Configure(loggerRepository, new FileInfo("log4net
 
 #endregion
 
+#region Conexion BD
+builder.Services.AddDbContext<Context>(options =>
+
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.CommandTimeout(3000)
+    ));
+#endregion
+
+#region Repositorios y UOW
+builder.Services.AddScoped<IciudadesRepository, ciudadesRepository>();
+builder.Services.AddScoped<IdepartamentosRepository, departamentosRepository>();
+builder.Services.AddScoped<Ihistorico_refresh_tokenRepository, historico_Refresh_TokenRepository>();
+builder.Services.AddScoped<ILogs_SiniestrosRepository, Logs_SiniestrosRepository>();
+builder.Services.AddScoped<ISiniestrosRepository, siniestrosRepository>();
+builder.Services.AddScoped<Itipos_siniestroRepository, tipos_SiniestroRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+#endregion
+
 #region AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(AutoMapperProfile).Assembly);
+#endregion
+
+#region MediatR
+
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(Application.AssemblyReference).Assembly));
+#endregion
+
+#region Servicios
+
+builder.Services.AddTransient(typeof(IAppLogger<>), typeof(WebAPI.Log4NetAppLogger<>));
+
+
 #endregion
 
 #region JWT
@@ -77,7 +109,7 @@ var jwtSettings = new JwtSettings();
 builder.Configuration.Bind(nameof(JwtSettings), jwtSettings);
 builder.Services.AddSingleton(jwtSettings);
 
-var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
+var key = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -104,26 +136,7 @@ builder.Services.AddAuthentication(options =>
 
 #endregion
 
-#region Conexion BD
-builder.Services.AddDbContext<Context>(options =>
 
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        sqlOptions => sqlOptions.CommandTimeout(3000)
-    ));
-#endregion
-
-#region MediatR
-
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(Application.AssemblyReference).Assembly));
-#endregion
-
-#region Servicios
-
-builder.Services.AddTransient(typeof(IAppLogger<>), typeof(WebAPI.Log4NetAppLogger<>));
-
-
-#endregion
 #region HttpOnly Cookie
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.ConfigureApplicationCookie(options =>
@@ -134,16 +147,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 #endregion
 
-#region Repositorios y UOW
-builder.Services.AddScoped<IciudadesRepository, ciudadesRepository>();
-builder.Services.AddScoped<IdepartamentosRepository, departamentosRepository>();
-builder.Services.AddScoped<Ihistorico_refresh_tokenRepository, historico_Refresh_TokenRepository>();
-builder.Services.AddScoped<ILogs_SiniestrosRepository, Logs_SiniestrosRepository>();
-builder.Services.AddScoped<ISiniestrosRepository, siniestrosRepository>();
-builder.Services.AddScoped<Itipos_siniestroRepository, tipos_SiniestroRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-#endregion
 
 var app = builder.Build();
 
@@ -161,6 +165,7 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 // Usar el middleware JWT para la autenticación
 app.UseMiddleware<JwtMiddleware>();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -19,7 +19,7 @@ namespace Application.Services.JWT
             _authService = authService;
         }
 
-        public async Task<string> GenerateRefreshToken(long usuario_id, string token)
+        public async Task<string> GenerateRefreshToken( string token)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Application.Services.JWT
                 var expiro = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
                 if (expiro.Identity.IsAuthenticated == true)
                 {
-                    throw new SecurityTokenExpiredException("El token No ha expirado");
+                    throw new SecurityTokenExpiredException("|El token No ha expirado");
                 }
 
 

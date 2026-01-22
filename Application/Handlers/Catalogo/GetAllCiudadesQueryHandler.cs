@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Handlers.Departamento_ciudades
 {
-    internal class GetAllCiudadesQueryHandler : IRequestHandler<GetAllCiudadesQuery, PagedResult<ciudades>>
+    internal class GetAllCiudadesQueryHandler : IRequestHandler<GetAllCiudadesQuery, CountPage<ciudades>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -15,9 +15,26 @@ namespace Application.Handlers.Departamento_ciudades
             _unitOfWork = unitOfWork;
         }
 
-        public Task<PagedResult<ciudades>> Handle(GetAllCiudadesQuery request, CancellationToken cancellationToken)
+        public async Task<CountPage<ciudades>> Handle(GetAllCiudadesQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _unitOfWork.ciudadesRepository.GetallCiudades();
+                var filtro = result.Where(x => string.IsNullOrWhiteSpace(request.nombre) || x.nombre.Contains(request.nombre)).ToList();
+
+                return new CountPage<ciudades>
+                {
+                    TotalCount = filtro.Count(),
+                    Items = filtro.Skip((request.PageNumber - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .ToList()
+                };
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -4,25 +4,25 @@ using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.Handlers.Departamento_ciudades
+namespace Application.Handlers.Catalogo
 {
-    internal class GetAllDepartamentosQueryHandler : IRequestHandler<GetAllDepartamentosQuery, CountPage<departamentos>>
+    internal class GetAllTipo_siniestroQueryHandler : IRequestHandler<GetAllTipo_siniestroQuery, CountPage<tipos_siniestro>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public GetAllDepartamentosQueryHandler(IUnitOfWork unitOfWork)
+        public GetAllTipo_siniestroQueryHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<CountPage<departamentos>> Handle(GetAllDepartamentosQuery request, CancellationToken cancellationToken)
+        public async Task<CountPage<tipos_siniestro>> Handle(GetAllTipo_siniestroQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var result = await _unitOfWork.departamentosRepository.GetAllAsync();
+                var result = await _unitOfWork.tipos_SiniestroRepository.GetAllAsync();
                 var filtro = result.Where(x => string.IsNullOrWhiteSpace(request.nombre) || x.nombre.Contains(request.nombre)).ToList();
 
-                return new CountPage<departamentos>
+                return new CountPage<tipos_siniestro>
                 {
                     TotalCount = filtro.Count(),
                     Items = filtro.Skip((request.PageNumber - 1) * request.PageSize)

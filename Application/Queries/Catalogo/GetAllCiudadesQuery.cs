@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Application.Queries.CiudadQ
 {
-    public record GetAllCiudadesQuery(int Page, int PageSize) : IRequest<PagedResult<ciudades>>;
+    public record GetAllCiudadesQuery(string? nombre,int PageNumber = 1, int PageSize = 10) : IRequest<CountPage<ciudades>>;
 }
